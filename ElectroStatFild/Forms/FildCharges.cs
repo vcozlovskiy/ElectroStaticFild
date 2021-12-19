@@ -26,19 +26,27 @@ namespace ElectroStatFild
             addQ.Show();
         }
 
-        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        private async void pictureBox1_PaintAsync(object sender, PaintEventArgs e)
         {
             Graphics graphics = e.Graphics;
-            SolidBrush brush = new SolidBrush(Color.Red);
+            SolidBrush brushRed = new SolidBrush(Color.Red);
+            SolidBrush brushBlue = new SolidBrush(Color.Blue);
 
             Fild fild = new Fild(ChargeList);
 
             foreach (Charge charge in ChargeList)
             {
-                graphics.FillEllipse(brush, charge.location.X - 5,charge.location.Y - 5, 10f,10f);
+                if (charge.q > 0) 
+                {
+                    graphics.FillEllipse(brushRed, charge.location.X - 5, charge.location.Y - 5, 10f, 10f);
+                }
+                else
+                {
+                    graphics.FillEllipse(brushBlue, charge.location.X - 5, charge.location.Y - 5, 10f, 10f);
+                }
             }
 
-            fild.GetFildLians(sender, e, 2);
+            await fild.GetFildLians(sender, e, 0.1f);
         }
 
         private void button1_MouseClick(object sender, MouseEventArgs e)

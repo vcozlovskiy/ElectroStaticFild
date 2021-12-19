@@ -30,25 +30,25 @@ namespace ElectroStatFild.Model
             this.chargeList = chargeList;
         }
 
-        public void GetFildLians(object sender,PaintEventArgs e, float step)
+        public async Task GetFildLians(object sender,PaintEventArgs e, float step)
         {
             PictureBox picture = sender as PictureBox;
             Graphics graphics = e.Graphics;
             SolidBrush f = new SolidBrush(Color.Black);
             ChargeList = chargeList;
-            float[,] marixFild = GetMatrixFild(picture, step);
+            float[,] matrixFild = GetMatrixFild(picture, step);
 
-            float maxValue = 1000;
+            float averageValue = GetMaxValye(matrixFild);
 
 
-            for (float tempValue = 0; tempValue < maxValue; tempValue += maxValue / 10)
+            for (float tempValue = 0; tempValue < averageValue; tempValue += averageValue / 10)
             {
-                for (int i = 0; i <= marixFild.GetUpperBound(0); i++)
+                for (int i = 0; i <= matrixFild.GetUpperBound(0); i++)
                 {
-                    for (int j = 0; j <= marixFild.GetUpperBound(1); j++)
+                    for (int j = 0; j <= matrixFild.GetUpperBound(1); j++)
                     {
-                        if (marixFild[i, j] > tempValue &&
-                            marixFild[i, j] < tempValue + 10)
+                        if (matrixFild[i, j] > tempValue &&
+                            matrixFild[i, j] < tempValue + averageValue * 0.01 )
                         {
                             graphics.FillRectangle(f, j * step, i * step, step, step);
                         }
@@ -90,6 +90,19 @@ namespace ElectroStatFild.Model
             }
 
             return elecricFildValue;
+        }
+
+        private float GetMaxValye(float[,] arr)
+        {
+            float max = arr[0, 0];
+
+            foreach(float value in arr)
+            {
+                max += value;
+            }
+
+            return max / (arr.GetUpperBound(0) * arr.GetUpperBound(1));
+
         }
     }
 }
